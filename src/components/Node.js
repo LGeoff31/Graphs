@@ -1,7 +1,7 @@
 import React from "react";
 
-const Node = ({ className }) => {
-  return <div className={className}></div>;
-};
+const Node = ({ className, onMouseDown, ...props }) => (
+  <div {...props} className={className} onMouseDown={onMouseDown} />
+);
 
 export default Node;
