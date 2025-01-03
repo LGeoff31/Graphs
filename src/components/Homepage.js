@@ -7,22 +7,26 @@ import { dfs } from "../algorithms/dfs";
 
 // Add number tiles
 const Homepage = () => {
-  const rowSize = 30;
-  const colSize = 50;
+  const cellSize = 40;
+  const [gridDimensions, setGridDimensions] = useState({
+    rows: Math.floor(window.innerHeight / cellSize),
+    cols: Math.floor(window.innerWidth / cellSize),
+  });
 
   const [startPosition, setStartPosition] = useState({ row: 2, col: 4 });
   const [endPosition, setEndPosition] = useState({ row: 10, col: 10 });
   const [dragging, setDragging] = useState(null);
   const [selectedAlgorithm, setSelectedAlgorithm] = useState("bfs");
   const [visitedCount, setVisitedCount] = useState(0);
-
   const [paused, setPaused] = useState(true);
   const [speed, setSpeed] = useState(50);
   const speedRef = useRef(speed);
   const pausedRef = useRef(paused);
 
   const [grid, setGrid] = useState(
-    Array.from({ length: rowSize }, () => Array(colSize).fill("unvisited"))
+    Array.from({ length: gridDimensions.rows }, () =>
+      Array(gridDimensions.cols).fill("unvisited")
+    )
   );
   const bfsState = useRef({
     queue: [],
@@ -45,7 +49,9 @@ const Homepage = () => {
     pausedRef.current = true;
     setPaused(true);
     setGrid(
-      Array.from({ length: rowSize }, () => Array(colSize).fill("unvisited"))
+      Array.from({ length: gridDimensions.rows }, () =>
+        Array(gridDimensions.cols).fill("unvisited")
+      )
     );
     setVisitedCount(0);
     bfsState.current = {
@@ -70,7 +76,22 @@ const Homepage = () => {
       return "2x";
     }
   };
-
+  useEffect(() => {
+    const handleResize = () => {
+      const rows = Math.floor(window.innerHeight / cellSize);
+      const cols = Math.floor(window.innerWidth / cellSize);
+      setGridDimensions({ rows, cols });
+      setGrid(
+        Array.from({ length: gridDimensions.rows }, () =>
+          Array(gridDimensions.cols).fill("unvisited")
+        )
+      );
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
   // Adjust speed
   useEffect(() => {
     speedRef.current = speed;
@@ -86,6 +107,24 @@ const Homepage = () => {
       runAlgorithm();
     }
   }, [paused]);
+  const generateMaze = () => {
+    // Initialize grid with all cells as "unvisited" (paths)
+    const newGrid = Array.from({ length: gridDimensions.rows }, () =>
+      Array(gridDimensions.cols).fill("unvisited")
+    );
+
+    // Add outer borders
+    for (let i = 0; i < gridDimensions.rows; i++) {
+      newGrid[i][0] = "wall"; // Left border
+      newGrid[i][gridDimensions.cols - 1] = "wall"; // Right border
+    }
+    for (let j = 0; j < gridDimensions.cols; j++) {
+      newGrid[0][j] = "wall"; // Top border
+      newGrid[gridDimensions.rows - 1][j] = "wall"; // Bottom border
+    }
+    setGrid(newGrid);
+  };
+
   const handleAlgorithmChange = (event) => {
     setSelectedAlgorithm(event.target.value);
   };
@@ -94,8 +133,8 @@ const Homepage = () => {
       bfs(
         startPosition,
         endPosition,
-        rowSize,
-        colSize,
+        gridDimensions.rows,
+        gridDimensions.cols,
         grid,
         setGrid,
         speedRef,
@@ -110,8 +149,8 @@ const Homepage = () => {
       multiBFS(
         startPosition,
         endPosition,
-        rowSize,
-        colSize,
+        gridDimensions.rows,
+        gridDimensions.cols,
         grid,
         setGrid,
         speedRef,
@@ -126,8 +165,8 @@ const Homepage = () => {
       dfs(
         startPosition,
         endPosition,
-        rowSize,
-        colSize,
+        gridDimensions.rows,
+        gridDimensions.cols,
         grid,
         setGrid,
         speedRef,
@@ -198,17 +237,17 @@ const Homepage = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gray-300 overflow-auto justify-center">
+    <div className="bg-gray-300 h-screen">
       <div
-        className="grid  w-full  items-center justify-center mt-10"
+        className="grid justify-center"
         onMouseUp={handleMouseUp}
         onMouseMove={handleMouseMove}
       >
         {(() => {
           const rows = [];
-          for (let row = 0; row < rowSize; row++) {
+          for (let row = 0; row < gridDimensions.rows; row++) {
             const cols = [];
-            for (let col = 0; col < colSize; col++) {
+            for (let col = 0; col < gridDimensions.cols; col++) {
               const isStart =
                 row === startPosition.row && col === startPosition.col;
               const isEnd = row === endPosition.row && col === endPosition.col;
@@ -228,7 +267,7 @@ const Homepage = () => {
               cols.push(
                 <Node
                   key={`${row}-${col}`}
-                  className={`w-6 h-6 border border-grey-400 ${color}`}
+                  className={`w-10 h-10 border border-grey-400 ${color}`}
                   data-row={row}
                   data-col={col}
                   onMouseDown={(e) => {
@@ -249,7 +288,14 @@ const Homepage = () => {
           return rows;
         })()}
       </div>
-      <div class="flex items-center justify-center mt-10 gap-4">
+      {/* <div class="flex items-center justify-center mt-10 gap-4">
+        <button
+          onClick={generateMaze}
+          className="h-12 px-6 py-3 text-lg rounded-md bg-green-500 hover:bg-green-600"
+        >
+          Generate Maze
+        </button>
+
         <div className="flex justify-center">
           <select
             id="algorithmSelect"
@@ -281,7 +327,7 @@ const Homepage = () => {
           Reset
         </button>
         <p># Visited Cells: {visitedCount}</p>
-      </div>
+      </div> */}
     </div>
   );
 };

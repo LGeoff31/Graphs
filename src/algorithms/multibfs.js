@@ -117,8 +117,6 @@ const reconstructPath = async (
   pausedRef,
   onComplete
 ) => {
-  console.log("prev1", prev1, meetingPoint1);
-  console.log("prev2", prev2, meetingPoint2);
   // Reconstruct path from meeting point to start of queue1
   let current = meetingPoint1;
   while (current) {
