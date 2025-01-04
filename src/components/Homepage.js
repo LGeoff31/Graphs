@@ -237,9 +237,9 @@ const Homepage = () => {
   };
 
   return (
-    <div className="bg-gray-300 h-screen">
+    <div className="bg-gray-300 h-screen justify-center items-center flex">
       <div
-        className="grid justify-center"
+        className="grid justify-center items-center"
         onMouseUp={handleMouseUp}
         onMouseMove={handleMouseMove}
       >
@@ -287,47 +287,47 @@ const Homepage = () => {
           }
           return rows;
         })()}
-      </div>
-      {/* <div class="flex items-center justify-center mt-10 gap-4">
-        <button
-          onClick={generateMaze}
-          className="h-12 px-6 py-3 text-lg rounded-md bg-green-500 hover:bg-green-600"
-        >
-          Generate Maze
-        </button>
-
-        <div className="flex justify-center">
-          <select
-            id="algorithmSelect"
-            value={selectedAlgorithm}
-            onChange={handleAlgorithmChange}
-            className="p-2 borderb order-gray-300 rounded"
+        <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex gap-4 items-center">
+          <button
+            onClick={generateMaze}
+            className="h-12 px-6 py-3 text-lg rounded-md bg-green-500 hover:bg-green-600"
           >
-            <option value="bfs"> BFS </option>
-            <option value="multiBFS"> Multi-Source BFS </option>
-            <option value="dfs"> DFS</option>
-          </select>
+            Maze
+          </button>
+
+          <div className="flex justify-center">
+            <select
+              id="algorithmSelect"
+              value={selectedAlgorithm}
+              onChange={handleAlgorithmChange}
+              className="p-2 border order-gray-300 rounded"
+            >
+              <option value="bfs"> BFS </option>
+              <option value="multiBFS"> Multi-Source BFS </option>
+              <option value="dfs"> DFS</option>
+            </select>
+          </div>
+          <button
+            onClick={() => setPaused((prev) => !prev)}
+            className="h-12 px-6 py-3 text-lg rounded-md bg-green-500 hover:bg-green-600"
+          >
+            {paused ? <FaPlay /> : <FaPause />}
+          </button>
+          <button
+            onClick={handleSpeedChange}
+            className="h-12 px-6 py-3 text-lg rounded-md bg-green-500 hover:bg-green-600"
+          >
+            {speedDisplay()}
+          </button>
+          <button
+            onClick={resetBFSState}
+            className="h-12 px-6 py-3 text-lg rounded-md bg-green-500 hover:bg-green-600"
+          >
+            Reset
+          </button>
+          <p># Visited Cells: {visitedCount}</p>
         </div>
-        <button
-          onClick={() => setPaused((prev) => !prev)}
-          className="h-12 px-6 py-3 text-lg rounded-md bg-green-500 hover:bg-green-600"
-        >
-          {paused ? <FaPlay /> : <FaPause />}
-        </button>
-        <button
-          onClick={handleSpeedChange}
-          className="h-12 px-6 py-3 text-lg rounded-md bg-green-500 hover:bg-green-600"
-        >
-          {speedDisplay()}
-        </button>
-        <button
-          onClick={resetBFSState}
-          className="h-12 px-6 py-3 text-lg rounded-md bg-green-500 hover:bg-green-600"
-        >
-          Reset
-        </button>
-        <p># Visited Cells: {visitedCount}</p>
-      </div> */}
+      </div>
     </div>
   );
 };
