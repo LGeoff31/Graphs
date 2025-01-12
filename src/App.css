@@ -2,3 +2,33 @@
   margin: 0;
   padding: 0;
 }
+/* Add this CSS to your styles or global styles */
+.cell {
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.cell.visited {
+  background-color: #3b82f6; /* Blue for visited */
+}
+
+.cell.path {
+  background-color: #fbbf24; /* Yellow for path */
+}
+
+.cell.wall {
+  background-color: #6b7280; /* Gray for wall */
+}
+
+.cell.start {
+  background-color: #10b981; /* Green for start */
+}
+
+.cell.end {
+  background-color: #ef4444; /* Red for end */
+}
+
+/* Add this CSS for hover effect */
+.cell:hover {
+  transform: scale(1.05); /* Slight zoom effect on hover */
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+}

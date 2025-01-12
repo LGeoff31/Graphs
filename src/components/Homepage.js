@@ -4,6 +4,11 @@ import { FaPlay, FaPause } from "react-icons/fa";
 import { bfs } from "../algorithms/bfs";
 import { multiBFS } from "../algorithms/multibfs";
 import { dfs } from "../algorithms/dfs";
+import { RiResetLeftFill } from "react-icons/ri";
+import RefreshIcon from "@mui/icons-material/Refresh";
+import { GiPuzzle } from "react-icons/gi";
+import { FaBorderAll } from "react-icons/fa";
+import { FaBorderNone } from "react-icons/fa";
 
 // Add number tiles
 const Homepage = () => {
@@ -12,6 +17,7 @@ const Homepage = () => {
     rows: Math.floor(window.innerHeight / cellSize),
     cols: Math.floor(window.innerWidth / cellSize),
   });
+  console.log(window.innerHeight, window.innerWidth);
 
   const [startPosition, setStartPosition] = useState({ row: 2, col: 4 });
   const [endPosition, setEndPosition] = useState({ row: 10, col: 10 });
@@ -116,6 +122,7 @@ const Homepage = () => {
     // Add outer borders
     for (let i = 0; i < gridDimensions.rows; i++) {
       newGrid[i][0] = "wall"; // Left border
+
       newGrid[i][gridDimensions.cols - 1] = "wall"; // Right border
     }
     for (let j = 0; j < gridDimensions.cols; j++) {
@@ -239,7 +246,7 @@ const Homepage = () => {
   return (
     <div className="bg-gray-300 h-screen justify-center items-center flex">
       <div
-        className="grid justify-center items-center"
+        className="grid justify-center items-center h-80vh"
         onMouseUp={handleMouseUp}
         onMouseMove={handleMouseMove}
       >
@@ -267,7 +274,7 @@ const Homepage = () => {
               cols.push(
                 <Node
                   key={`${row}-${col}`}
-                  className={`w-10 h-10 border border-grey-400 ${color}`}
+                  className={`w-10 h-10 border border-grey-400 cell ${color}`}
                   data-row={row}
                   data-col={col}
                   onMouseDown={(e) => {
@@ -287,20 +294,20 @@ const Homepage = () => {
           }
           return rows;
         })()}
-        <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex gap-4 items-center">
+        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-4 items-center">
           <button
             onClick={generateMaze}
             className="h-12 px-6 py-3 text-lg rounded-md bg-green-500 hover:bg-green-600"
           >
-            Maze
+            <FaBorderNone />
           </button>
 
-          <div className="flex justify-center">
+          <div className="flex justify-center bg-blue-500 rounded-md text-white shadow-lg">
             <select
               id="algorithmSelect"
               value={selectedAlgorithm}
               onChange={handleAlgorithmChange}
-              className="p-2 border order-gray-300 rounded"
+              className="p-3 border border-gray-300 rounded-md bg-white text-gray-700 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 hover:bg-blue-50 transition-colors duration-200"
             >
               <option value="bfs"> BFS </option>
               <option value="multiBFS"> Multi-Source BFS </option>
@@ -321,11 +328,15 @@ const Homepage = () => {
           </button>
           <button
             onClick={resetBFSState}
-            className="h-12 px-6 py-3 text-lg rounded-md bg-green-500 hover:bg-green-600"
+            className="h-12 px-6 py-3 rounded-md bg-green-500 hover:bg-green-600"
           >
-            Reset
+            <RefreshIcon />
           </button>
-          <p># Visited Cells: {visitedCount}</p>
+        </div>
+        <div className="absolute top-6 right-6 transform -translate-x-1/2 flex gap-4 items-center">
+          <p className="text-lg font-bold text-white bg-blue-500 px-6 py-2 rounded shadow">
+            {visitedCount}
+          </p>
         </div>
       </div>
     </div>
