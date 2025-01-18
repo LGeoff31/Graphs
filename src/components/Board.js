@@ -65,13 +65,22 @@ const Board = ({
 
     e.preventDefault();
   };
+  const [isDarkMode, setIsDarkMode] = useState(true);
 
   return (
     <div
-      className="grid justify-center items-center h-80vh"
+      className={`grid justify-center items-center h-80vh ${
+        isDarkMode ? "bg-grey-900 text-white" : "bg-white text-black"
+      }`}
       onMouseUp={handleMouseUp}
       onMouseMove={handleMouseMove}
     >
+      <button
+        onClick={() => setIsDarkMode(!isDarkMode)}
+        className="absolute top-4 right-4 bg-gray-800 text-white p-2 rounded"
+      >
+        Toggle Dark Mode
+      </button>
       {(() => {
         const rows = [];
         for (let row = 0; row < gridDimensions.rows; row++) {
@@ -81,22 +90,28 @@ const Board = ({
               row === startPosition.row && col === startPosition.col;
             const isEnd = row === endPosition.row && col === endPosition.col;
             const isWall = grid[row][col] === "wall";
-            const color = isStart
-              ? "bg-green-500"
-              : isEnd
-              ? "bg-red-500"
-              : grid[row][col] === "visited"
-              ? "bg-blue-400"
-              : grid[row][col] === "path"
-              ? "bg-yellow-400"
-              : isWall
-              ? "bg-gray-500"
-              : "bg-white";
+            let color;
+            if (isStart) {
+              color = "bg-green-500";
+            } else if (isEnd) {
+              color = "bg-red-500";
+            } else if (grid[row][col] === "visited") {
+              color = "bg-blue-400";
+            } else if (grid[row][col] === "path") {
+              color = "bg-yellow-400";
+            } else if (isWall) {
+              color = "bg-gray-500";
+            } else {
+              color = isDarkMode ? "bg-gray-700" : "bg-white";
+            }
+            const borderColor = isDarkMode
+              ? "border-[rgba(255,255,255,0.02)]"
+              : "border-grey-900";
 
             cols.push(
               <Node
                 key={`${row}-${col}`}
-                className={`w-10 h-10 border border-grey-400 cell ${color}`}
+                className={`w-10 h-10 border ${borderColor} cell ${color}`}
                 data-row={row}
                 data-col={col}
                 onMouseDown={(e) => {
