@@ -6,10 +6,14 @@ import { dfs } from "../algorithms/dfs";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import Hamburger from "./Hamburger";
 import Board from "./Board";
+import {
+  cellSize,
+  speedDisplay,
+  handleSpeedChange,
+} from "../composables/utilities";
 
 // Add number tiles
 const Homepage = () => {
-  const cellSize = 40;
   const [gridDimensions, setGridDimensions] = useState({
     rows: Math.floor(window.innerHeight / cellSize),
     cols: Math.floor(window.innerWidth / cellSize),
@@ -18,7 +22,6 @@ const Homepage = () => {
     row: Math.floor(Math.random() * gridDimensions.rows),
     col: Math.floor(Math.random() * gridDimensions.cols),
   });
-  console.log(startPosition);
   const [endPosition, setEndPosition] = useState({
     row: Math.floor(Math.random() * gridDimensions.rows),
     col: Math.floor(Math.random() * gridDimensions.cols),
@@ -67,38 +70,17 @@ const Homepage = () => {
       prev: new Map(),
       isComplete: false,
     };
+    multiBfsState.current = {
+      queue1: [],
+      queue2: [],
+      visited1: new Set(),
+      visited2: new Set(),
+      prev1: new Map(),
+      prev2: new Map(),
+      isComplete: false,
+    };
   };
 
-  const handleSpeedChange = () => {
-    const speeds = [100, 50, 25];
-    const currentIndex = speeds.indexOf(speed);
-    setSpeed(speeds[(currentIndex + 1) % speeds.length]);
-  };
-  const speedDisplay = () => {
-    if (speed === 50) {
-      return "1x";
-    } else if (speed === 100) {
-      return "0.5x";
-    } else {
-      return "2x";
-    }
-  };
-  useEffect(() => {
-    const handleResize = () => {
-      const rows = Math.floor(window.innerHeight / cellSize);
-      const cols = Math.floor(window.innerWidth / cellSize);
-      setGridDimensions({ rows, cols });
-      setGrid(
-        Array.from({ length: gridDimensions.rows }, () =>
-          Array(gridDimensions.cols).fill("unvisited")
-        )
-      );
-    };
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
   // Adjust speed
   useEffect(() => {
     speedRef.current = speed;
@@ -203,10 +185,10 @@ const Homepage = () => {
           {paused ? <FaPlay /> : <FaPause />}
         </button>
         <button
-          onClick={handleSpeedChange}
+          onClick={() => handleSpeedChange(setSpeed, speed)}
           className="h-12 px-6 py-3 text-lg rounded-md bg-green-500 hover:bg-green-600"
         >
-          {speedDisplay()}
+          {speedDisplay(speed)}
         </button>
         <button
           onClick={resetBFSState}
