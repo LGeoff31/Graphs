@@ -9,6 +9,7 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 import { GiPuzzle } from "react-icons/gi";
 import { FaBorderAll } from "react-icons/fa";
 import { FaBorderNone } from "react-icons/fa";
+import Hamburger from "./Hamburger";
 
 // Add number tiles
 const Homepage = () => {
@@ -294,14 +295,10 @@ const Homepage = () => {
           }
           return rows;
         })()}
+        <div className="absolute top-10 left-10 flex  flex gap-4 items-center">
+          <Hamburger />
+        </div>
         <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-4 items-center">
-          <button
-            onClick={generateMaze}
-            className="h-12 px-6 py-3 text-lg rounded-md bg-green-500 hover:bg-green-600"
-          >
-            <FaBorderNone />
-          </button>
-
           <div className="flex justify-center bg-blue-500 rounded-md text-white shadow-lg">
             <select
               id="algorithmSelect"
