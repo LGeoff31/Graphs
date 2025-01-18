@@ -11,9 +11,11 @@ import {
   speedDisplay,
   handleSpeedChange,
 } from "../composables/utilities";
+import LightMode from "./LightMode";
 
 // Add number tiles
 const Homepage = () => {
+  const [isDarkMode, setIsDarkMode] = useState(true);
   const [gridDimensions, setGridDimensions] = useState({
     rows: Math.floor(window.innerHeight / cellSize),
     cols: Math.floor(window.innerWidth / cellSize),
@@ -160,10 +162,10 @@ const Homepage = () => {
         setStartPosition={setStartPosition}
         setEndPosition={setEndPosition}
         setGrid={setGrid}
+        isDarkMode={isDarkMode}
       />
-
-      <div className="absolute top-10 left-10 flex  flex gap-4 items-center">
-        <Hamburger />
+      <div className="absolute top-5 left-5 p-2 ">
+        <LightMode setIsDarkMode={setIsDarkMode} isDarkMode={isDarkMode} />
       </div>
       <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-4 items-center">
         <div className="flex justify-center bg-blue-500 rounded-md text-white shadow-lg">

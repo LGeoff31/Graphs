@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Node from "./Node";
+import LightMode from "./LightMode";
 
 const Board = ({
   gridDimensions,
@@ -9,6 +10,7 @@ const Board = ({
   setGrid,
   setStartPosition,
   setEndPosition,
+  isDarkMode,
 }) => {
   const [dragging, setDragging] = useState(null);
 
@@ -65,7 +67,6 @@ const Board = ({
 
     e.preventDefault();
   };
-  const [isDarkMode, setIsDarkMode] = useState(true);
 
   return (
     <div
@@ -75,12 +76,6 @@ const Board = ({
       onMouseUp={handleMouseUp}
       onMouseMove={handleMouseMove}
     >
-      <button
-        onClick={() => setIsDarkMode(!isDarkMode)}
-        className="absolute top-4 right-4 bg-gray-800 text-white p-2 rounded"
-      >
-        Toggle Dark Mode
-      </button>
       {(() => {
         const rows = [];
         for (let row = 0; row < gridDimensions.rows; row++) {
