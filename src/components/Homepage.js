@@ -1,15 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
-import Node from "./Node";
 import { FaPlay, FaPause } from "react-icons/fa";
 import { bfs } from "../algorithms/bfs";
 import { multiBFS } from "../algorithms/multibfs";
 import { dfs } from "../algorithms/dfs";
-import { RiResetLeftFill } from "react-icons/ri";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import { GiPuzzle } from "react-icons/gi";
-import { FaBorderAll } from "react-icons/fa";
-import { FaBorderNone } from "react-icons/fa";
 import Hamburger from "./Hamburger";
+import Board from "./Board";
 
 // Add number tiles
 const Homepage = () => {
@@ -18,11 +14,15 @@ const Homepage = () => {
     rows: Math.floor(window.innerHeight / cellSize),
     cols: Math.floor(window.innerWidth / cellSize),
   });
-  console.log(window.innerHeight, window.innerWidth);
-
-  const [startPosition, setStartPosition] = useState({ row: 2, col: 4 });
-  const [endPosition, setEndPosition] = useState({ row: 10, col: 10 });
-  const [dragging, setDragging] = useState(null);
+  const [startPosition, setStartPosition] = useState({
+    row: Math.floor(Math.random() * gridDimensions.rows),
+    col: Math.floor(Math.random() * gridDimensions.cols),
+  });
+  console.log(startPosition);
+  const [endPosition, setEndPosition] = useState({
+    row: Math.floor(Math.random() * gridDimensions.rows),
+    col: Math.floor(Math.random() * gridDimensions.cols),
+  });
   const [selectedAlgorithm, setSelectedAlgorithm] = useState("bfs");
   const [visitedCount, setVisitedCount] = useState(0);
   const [paused, setPaused] = useState(true);
@@ -109,29 +109,10 @@ const Homepage = () => {
   }, [paused]);
   // Play animation
   useEffect(() => {
-    console.log("ran");
     if (!paused) {
       runAlgorithm();
     }
   }, [paused]);
-  const generateMaze = () => {
-    // Initialize grid with all cells as "unvisited" (paths)
-    const newGrid = Array.from({ length: gridDimensions.rows }, () =>
-      Array(gridDimensions.cols).fill("unvisited")
-    );
-
-    // Add outer borders
-    for (let i = 0; i < gridDimensions.rows; i++) {
-      newGrid[i][0] = "wall"; // Left border
-
-      newGrid[i][gridDimensions.cols - 1] = "wall"; // Right border
-    }
-    for (let j = 0; j < gridDimensions.cols; j++) {
-      newGrid[0][j] = "wall"; // Top border
-      newGrid[gridDimensions.rows - 1][j] = "wall"; // Bottom border
-    }
-    setGrid(newGrid);
-  };
 
   const handleAlgorithmChange = (event) => {
     setSelectedAlgorithm(event.target.value);
@@ -187,154 +168,57 @@ const Homepage = () => {
       );
     }
   };
-  // Selecting a start or end node
-  const handleMouseDown = (e, type) => {
-    const target = e.target;
-    const row = parseInt(target.dataset.row);
-    const col = parseInt(target.dataset.col);
-
-    if (isNaN(row) || isNaN(col)) return;
-    if (type === "start") {
-      setDragging("start");
-      setStartPosition({ row, col });
-    } else if (type === "end") {
-      setDragging("end");
-      setEndPosition({ row, col });
-    } else if (type === "wall") {
-      setDragging("wall");
-    }
-
-    e.preventDefault();
-  };
-  // Update start or end node position
-  const handleMouseMove = (e) => {
-    if (!dragging) return;
-
-    const target = e.target;
-    const row = parseInt(target.dataset.row);
-    const col = parseInt(target.dataset.col);
-
-    if (isNaN(row) || isNaN(col)) return;
-
-    if (dragging === "start") {
-      setStartPosition({ row, col });
-    } else if (dragging === "end") {
-      setEndPosition({ row, col });
-    } else if (dragging === "wall") {
-      toggleWall(row, col);
-    }
-  };
-
-  const toggleWall = (row, col) => {
-    setGrid((prevGrid) => {
-      const newGrid = prevGrid.map((gridRow, rowIndex) =>
-        gridRow.map((node, colIndex) => {
-          if (rowIndex === row && colIndex === col) {
-            return node === "wall" ? "unvisited" : "wall";
-          }
-          return node;
-        })
-      );
-      return newGrid;
-    });
-  };
-
-  // Stop dragging when the mouse is released
-  const handleMouseUp = () => {
-    setDragging(null);
-  };
-
   return (
     <div className="bg-gray-300 h-screen justify-center items-center flex">
-      <div
-        className="grid justify-center items-center h-80vh"
-        onMouseUp={handleMouseUp}
-        onMouseMove={handleMouseMove}
-      >
-        {(() => {
-          const rows = [];
-          for (let row = 0; row < gridDimensions.rows; row++) {
-            const cols = [];
-            for (let col = 0; col < gridDimensions.cols; col++) {
-              const isStart =
-                row === startPosition.row && col === startPosition.col;
-              const isEnd = row === endPosition.row && col === endPosition.col;
-              const isWall = grid[row][col] === "wall";
-              const color = isStart
-                ? "bg-green-500"
-                : isEnd
-                ? "bg-red-500"
-                : grid[row][col] === "visited"
-                ? "bg-blue-400"
-                : grid[row][col] === "path"
-                ? "bg-yellow-400"
-                : isWall
-                ? "bg-gray-500"
-                : "bg-white";
+      <Board
+        gridDimensions={gridDimensions}
+        startPosition={startPosition}
+        endPosition={endPosition}
+        grid={grid}
+        setStartPosition={setStartPosition}
+        setEndPosition={setEndPosition}
+        setGrid={setGrid}
+      />
 
-              cols.push(
-                <Node
-                  key={`${row}-${col}`}
-                  className={`w-10 h-10 border border-grey-400 cell ${color}`}
-                  data-row={row}
-                  data-col={col}
-                  onMouseDown={(e) => {
-                    handleMouseDown(
-                      e,
-                      isStart ? "start" : isEnd ? "end" : "wall"
-                    );
-                  }}
-                />
-              );
-            }
-            rows.push(
-              <div key={row} className="flex">
-                {cols}
-              </div>
-            );
-          }
-          return rows;
-        })()}
-        <div className="absolute top-10 left-10 flex  flex gap-4 items-center">
-          <Hamburger />
-        </div>
-        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-4 items-center">
-          <div className="flex justify-center bg-blue-500 rounded-md text-white shadow-lg">
-            <select
-              id="algorithmSelect"
-              value={selectedAlgorithm}
-              onChange={handleAlgorithmChange}
-              className="p-3 border border-gray-300 rounded-md bg-white text-gray-700 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 hover:bg-blue-50 transition-colors duration-200"
-            >
-              <option value="bfs"> BFS </option>
-              <option value="multiBFS"> Multi-Source BFS </option>
-              <option value="dfs"> DFS</option>
-            </select>
-          </div>
-          <button
-            onClick={() => setPaused((prev) => !prev)}
-            className="h-12 px-6 py-3 text-lg rounded-md bg-green-500 hover:bg-green-600"
+      <div className="absolute top-10 left-10 flex  flex gap-4 items-center">
+        <Hamburger />
+      </div>
+      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-4 items-center">
+        <div className="flex justify-center bg-blue-500 rounded-md text-white shadow-lg">
+          <select
+            id="algorithmSelect"
+            value={selectedAlgorithm}
+            onChange={handleAlgorithmChange}
+            className="p-3 border border-gray-300 rounded-md bg-white text-gray-700 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 hover:bg-blue-50 transition-colors duration-200"
           >
-            {paused ? <FaPlay /> : <FaPause />}
-          </button>
-          <button
-            onClick={handleSpeedChange}
-            className="h-12 px-6 py-3 text-lg rounded-md bg-green-500 hover:bg-green-600"
-          >
-            {speedDisplay()}
-          </button>
-          <button
-            onClick={resetBFSState}
-            className="h-12 px-6 py-3 rounded-md bg-green-500 hover:bg-green-600"
-          >
-            <RefreshIcon />
-          </button>
+            <option value="bfs"> BFS </option>
+            <option value="multiBFS"> Multi-Source BFS </option>
+            <option value="dfs"> DFS</option>
+          </select>
         </div>
-        <div className="absolute top-6 right-6 transform -translate-x-1/2 flex gap-4 items-center">
-          <p className="text-lg font-bold text-white bg-blue-500 px-6 py-2 rounded shadow">
-            {visitedCount}
-          </p>
-        </div>
+        <button
+          onClick={() => setPaused((prev) => !prev)}
+          className="h-12 px-6 py-3 text-lg rounded-md bg-green-500 hover:bg-green-600"
+        >
+          {paused ? <FaPlay /> : <FaPause />}
+        </button>
+        <button
+          onClick={handleSpeedChange}
+          className="h-12 px-6 py-3 text-lg rounded-md bg-green-500 hover:bg-green-600"
+        >
+          {speedDisplay()}
+        </button>
+        <button
+          onClick={resetBFSState}
+          className="h-12 px-6 py-3 rounded-md bg-green-500 hover:bg-green-600"
+        >
+          <RefreshIcon />
+        </button>
+      </div>
+      <div className="absolute top-6 right-6 transform -translate-x-1/2 flex gap-4 items-center">
+        <p className="text-lg font-bold text-white bg-blue-500 px-6 py-2 rounded shadow">
+          {visitedCount}
+        </p>
       </div>
     </div>
   );
