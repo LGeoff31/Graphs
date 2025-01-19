@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Node from "./Node";
 import LightMode from "./LightMode";
+import { CiPlay1 } from "react-icons/ci";
 
 const Board = ({
   gridDimensions,
@@ -115,7 +116,7 @@ const Board = ({
                     isStart ? "start" : isEnd ? "end" : "wall"
                   );
                 }}
-              />
+              ></Node>
             );
           }
           rows.push(

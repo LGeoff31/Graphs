@@ -199,8 +199,8 @@ const Homepage = () => {
           <RefreshIcon />
         </button>
       </div>
-      <div className="absolute top-6 right-6 transform -translate-x-1/2 flex gap-4 items-center">
-        <p className="text-lg font-bold text-white bg-blue-500 px-6 py-2 rounded shadow">
+      <div className="absolute top-6 right-6 p-4  bg-opacity-90  rounded-lg flex gap-4 items-center">
+        <p className="text-lg font-bold text-white bg-blue-500 px-8 py-3 rounded-full shadow">
           {visitedCount}
         </p>
       </div>
