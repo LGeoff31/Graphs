@@ -1,71 +1,69 @@
-# Getting Started with Create React App
+# 🚀 Pathfinding Visualizer
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## ✨ Features
 
-## Available Scripts
+### **Interactive Grid**
+- **Dynamic Grid Generation**: Automatically adjusts to your screen size
+- **Real-time Wall Building**: Click and drag to create obstacles
+- **Start/End Point Placement**: Drag to reposition start (green) and end (red) points
+- **Responsive Design**: Works seamlessly on different screen sizes
 
-In the project directory, you can run:
+### **Multiple Algorithms**
+- **Breadth-First Search (BFS)**: Explores level by level, guaranteed shortest path
+- **Depth-First Search (DFS)**: Goes deep first, explores all possible paths
+- **Multi-Source BFS**: Bidirectional search from both start and end points
 
-### `npm start`
+### **Beautiful Animations**
+- **Smooth Node Transitions**: Each visited node animates with particle effects
+- **Path Visualization**: Animated path reconstruction with glowing effects
+- **Interactive Controls**: Hover and click animations on all UI elements
+- **Particle Background**: Floating particles create an immersive experience
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### **Performance Controls**
+- **4 Speed Levels**: 0.5x, 1x, 2x, and 4x visualization speeds
+- **Play/Pause**: Control algorithm execution in real-time
+- **Reset Functionality**: Clear the grid and start fresh
+- **Real-time Stats**: Live algorithm statistics and node count
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### **Modern UI/UX**
+- **Dark/Light Mode**: Toggle between themes with animated transitions
+- **Glassmorphism Design**: Modern frosted glass effect on controls
+- **Responsive Layout**: Optimized for desktop and mobile viewing
+- **Loading Screen**: Beautiful animated startup sequence
 
-### `npm test`
+## How to Use
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Basic Controls
+- **Click and Drag**: Create walls by clicking and dragging on empty cells
+- **Drag Start/End**: Click and drag the green (start) or red (end) nodes to reposition them
+- **Algorithm Selection**: Choose from BFS, DFS, or Multi-Source BFS from the dropdown
+- **Speed Control**: Click the speed button to cycle through 0.5x, 1x, 2x, and 4x speeds
+- **Play/Pause**: Use the play button to start or pause the algorithm
+- **Reset**: Click the refresh button to clear the grid and reset everything
 
-### `npm run build`
+### Understanding the Visualization
+- **Green Node**: Starting point
+- **Red Node**: Destination point
+- **Blue Nodes**: Visited cells during algorithm execution
+- **Yellow Path**: Final path from start to end
+- **Gray Walls**: Obstacles that algorithms must navigate around
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🎯 Algorithm Details
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Breadth-First Search (BFS)
+- **Time Complexity**: O(V + E) where V is vertices and E is edges
+- **Space Complexity**: O(V)
+- **Guarantee**: Always finds the shortest path
+- **Best For**: Finding shortest paths in unweighted graphs
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Depth-First Search (DFS)
+- **Time Complexity**: O(V + E)
+- **Space Complexity**: O(V) in worst case
+- **Guarantee**: Finds a path (not necessarily shortest)
+- **Best For**: Exploring all possible paths, maze solving
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-# Pathfinding
+### Multi-Source BFS
+- **Time Complexity**: O(V + E)
+- **Space Complexity**: O(V)
+- **Guarantee**: Finds shortest path with bidirectional search
+- **Best For**: Faster pathfinding in large grids
