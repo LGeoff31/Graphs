@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { motion } from "framer-motion";
 import Node from "./Node";
 import LightMode from "./LightMode";
 import { CiPlay1 } from "react-icons/ci";
@@ -70,12 +71,15 @@ const Board = ({
   };
 
   return (
-    <div
+    <motion.div
       className={`grid justify-center items-center h-80vh ${
-        isDarkMode ? "bg-grey-900 text-white" : "bg-white text-black"
+        isDarkMode ? "bg-gray-900 text-white" : "bg-white text-black"
       }`}
       onMouseUp={handleMouseUp}
       onMouseMove={handleMouseMove}
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
     >
       {(() => {
         const rows = [];
@@ -86,14 +90,17 @@ const Board = ({
               row === startPosition.row && col === startPosition.col;
             const isEnd = row === endPosition.row && col === endPosition.col;
             const isWall = grid[row][col] === "wall";
+            const isVisited = grid[row][col] === "visited";
+            const isPath = grid[row][col] === "path";
+
             let color;
             if (isStart) {
               color = "bg-green-500";
             } else if (isEnd) {
               color = "bg-red-500";
-            } else if (grid[row][col] === "visited") {
+            } else if (isVisited) {
               color = "bg-blue-400";
-            } else if (grid[row][col] === "path") {
+            } else if (isPath) {
               color = "bg-yellow-400";
             } else if (isWall) {
               color = "bg-gray-500";
@@ -102,32 +109,58 @@ const Board = ({
             }
             const borderColor = isDarkMode
               ? "border-[rgba(255,255,255,0.02)]"
-              : "border-grey-900";
+              : "border-gray-200";
 
             cols.push(
-              <Node
+              <motion.div
                 key={`${row}-${col}`}
-                className={`w-10 h-10 border ${borderColor} cell ${color}`}
-                data-row={row}
-                data-col={col}
-                onMouseDown={(e) => {
-                  handleMouseDown(
-                    e,
-                    isStart ? "start" : isEnd ? "end" : "wall"
-                  );
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{
+                  duration: 0.3,
+                  delay: (row + col) * 0.01,
+                  ease: "easeOut",
                 }}
-              ></Node>
+              >
+                <Node
+                  className={`w-10 h-10 border ${borderColor} cell ${color} shadow-sm hover:shadow-md transition-shadow duration-200`}
+                  data-row={row}
+                  data-col={col}
+                  isStart={isStart}
+                  isEnd={isEnd}
+                  isWall={isWall}
+                  isVisited={isVisited}
+                  isPath={isPath}
+                  isDarkMode={isDarkMode}
+                  onMouseDown={(e) => {
+                    handleMouseDown(
+                      e,
+                      isStart ? "start" : isEnd ? "end" : "wall"
+                    );
+                  }}
+                />
+              </motion.div>
             );
           }
           rows.push(
-            <div key={row} className="flex">
+            <motion.div
+              key={row}
+              className="flex"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{
+                duration: 0.4,
+                delay: row * 0.02,
+                ease: "easeOut",
+              }}
+            >
               {cols}
-            </div>
+            </motion.div>
           );
         }
         return rows;
       })()}
-    </div>
+    </motion.div>
   );
 };
 

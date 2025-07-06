@@ -9,7 +9,8 @@ export const multiBFS = async (
   pausedRef,
   onComplete,
   multiBfsState,
-  setVisitedCount
+  setVisitedCount,
+  getCurrentGrid
 ) => {
   const directions = [
     [-1, 0], // Up
@@ -62,7 +63,7 @@ export const multiBFS = async (
           0 <= newCol &&
           newCol < colSize &&
           !visited.has(key) &&
-          grid[newRow][newCol] !== "wall"
+          getCurrentGrid()[newRow][newCol] !== "wall"
         ) {
           if (otherVisited.has(key)) {
             // Found the meeting point, mark as complete

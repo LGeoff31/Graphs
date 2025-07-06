@@ -9,7 +9,8 @@ export const dfs = async (
   pausedRef,
   onComplete,
   dfsState,
-  setVisitedCount
+  setVisitedCount,
+  getCurrentGrid
 ) => {
   if (dfsState.visited.size === 0) {
     dfsState.visited.add(`${startPosition.row}-${startPosition.col}`);
@@ -61,7 +62,7 @@ export const dfs = async (
         0 <= newCol &&
         newCol < colSize &&
         !dfsState.visited.has(key) &&
-        grid[newRow][newCol] !== "wall"
+        getCurrentGrid()[newRow][newCol] !== "wall"
       ) {
         dfsState.visited.add(key);
         dfsState.prev.set(key, `${row}-${col}`);

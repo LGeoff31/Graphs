@@ -9,7 +9,8 @@ export const bfs = async (
   pausedRef,
   onComplete,
   bfsState,
-  setVisitedCount
+  setVisitedCount,
+  getCurrentGrid
 ) => {
   const directions = [
     [-1, 0],
@@ -64,7 +65,7 @@ export const bfs = async (
         0 <= newCol &&
         newCol < colSize &&
         !bfsState.visited.has(key) &&
-        grid[newRow][newCol] !== "wall"
+        getCurrentGrid()[newRow][newCol] !== "wall"
       ) {
         bfsState.visited.add(key);
         bfsState.queue.push({ row: newRow, col: newCol });
